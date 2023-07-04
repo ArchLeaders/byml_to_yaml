@@ -129,7 +129,7 @@ impl Runner {
         std::fs::write(
             match output {
                 None => {
-                    path.set_extension("byml");
+                    path.set_extension("yml");
                     path
                 }
                 Some(output_path) => output_path,
