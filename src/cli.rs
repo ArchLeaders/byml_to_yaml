@@ -15,7 +15,7 @@ xflags::xflags! {
             required path: PathBuf
 
             /// Output YAML file (defaults to $path with a yml extension)
-            optional output: PathBuf
+            optional -o, --output output: PathBuf
         }
 
         cmd to-byml {
@@ -23,13 +23,13 @@ xflags::xflags! {
             required path: PathBuf
 
             /// Output BYML file (defaults to $path with a byml extension)
-            optional output: PathBuf
+            optional -o, --output output: PathBuf
 
             /// Output BYML version
-            optional version: u16
+            optional -v, --version version: u16
 
             /// Output BYML endianness
-            optional endianness: Endianness
+            optional -e, --endianness endianness: Endianness
         }
     }
 }
@@ -52,12 +52,14 @@ pub enum BymlToYamlCmd {
 #[derive(Debug)]
 pub struct ToYaml {
     pub path: PathBuf,
+
     pub output: Option<PathBuf>,
 }
 
 #[derive(Debug)]
 pub struct ToByml {
     pub path: PathBuf,
+
     pub output: Option<PathBuf>,
     pub version: Option<u16>,
     pub endianness: Option<Endianness>,
