@@ -1,7 +1,10 @@
 mod cli;
 pub(crate) mod common;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() {
     let cli = cli::BymlToYaml::from_env_or_exit();
-    return cli::Runner::new(cli).run();
+    match cli::Runner::new(cli).run() {
+        Ok(()) => println!("Command executed successfully"),
+        Err(error) => println!("Error executaing command: {error:?}"),
+    }
 }
