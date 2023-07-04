@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 anyhow_ext = "0.2.1"
-roead = "0.23.1"
+roead = { version = "0.23.1", features = ["yaml"] }
 xflags = "0.3.1"
