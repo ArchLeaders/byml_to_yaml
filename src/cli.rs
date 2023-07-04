@@ -92,12 +92,12 @@ impl Runner {
 
     fn to_byml(
         &self,
-        path: &PathBuf,
+        path: &mut PathBuf,
         output: &Option<PathBuf>,
         version: &Option<u16>,
         endian: Endian,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        let text = std::fs::read(path)?;
+        let text = std::fs::read_to_string(path.as_path())?;
         let byml = Byml::from_text(text)?;
         std::fs::write(
             match output {
@@ -107,29 +107,35 @@ impl Runner {
                 }
                 Some(output_path) => output_path,
             },
-            byml.to_binary_with_version(endian, version),
-        );
+            byml.to_binary_with_version(
+                endian,
+                match version {
+                    None => 4,
+                    Some(value) => *value,
+                },
+            ),
+        )?;
 
         return Ok(());
     }
 
     fn to_yaml(
         &self,
-        path: &PathBuf,
+        path: &mut PathBuf,
         output: &Option<PathBuf>,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        let buffer = std::fs::read(path)?;
+        let buffer = std::fs::read(path.as_path())?;
         let byml = Byml::from_binary(buffer)?;
         std::fs::write(
             match output {
                 None => {
-                    path.set_extension("yml");
+                    path.set_extension("byml");
                     path
                 }
                 Some(output_path) => output_path,
             },
             byml.to_text(),
-        );
+        )?;
 
         return Ok(());
     }
@@ -143,7 +149,7 @@ impl Runner {
                 endianness,
             }) => {
                 return self.to_byml(
-                    path,
+                    &mut path.to_path_buf(),
                     output,
                     version,
                     match endianness {
@@ -156,7 +162,7 @@ impl Runner {
                 );
             }
             BymlToYamlCmd::ToYaml(ToYaml { path, output }) => {
-                return self.to_yaml(path, output);
+                return self.to_yaml(&mut path.to_path_buf(), output);
             }
         }
     }
