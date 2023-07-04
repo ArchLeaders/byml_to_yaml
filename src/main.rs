@@ -5,6 +5,6 @@ fn main() {
     let cli = cli::BymlToYaml::from_env_or_exit();
     match cli::Runner::new(cli).run() {
         Ok(()) => println!("Command executed successfully"),
-        Err(error) => println!("Error executaing command: {error:?}"),
+        Err(error) => println!("Error executing command: {error:?}"),
     }
 }
