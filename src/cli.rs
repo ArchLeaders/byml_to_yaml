@@ -5,12 +5,12 @@ use std::{option::Option, path::PathBuf};
 xflags::xflags! {
     src "./src/cli.rs"
 
-    cmd bymlToYaml {
+    cmd byml-to-yaml {
 
         /// Verbose logging for debugging
         optional -d, --debug
 
-        cmd toYaml {
+        cmd to-yaml {
             /// Path to the source BYML to convert to YAML
             required path: PathBuf
 
@@ -18,7 +18,7 @@ xflags::xflags! {
             optional output: PathBuf
         }
 
-        cmd toByml {
+        cmd to-byml {
             /// Path to the source YAML to convert to BYML
             required path: PathBuf
 
