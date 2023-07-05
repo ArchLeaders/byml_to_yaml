@@ -35,7 +35,7 @@ jobs:
         id: toml
         with:
           file: 'Cargo.toml'
-          field: 'workspace.package.version'
+          field: 'package.version'
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
