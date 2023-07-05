@@ -18,9 +18,6 @@ jobs:
           - os: windows-latest
             name: windows
             ext: .exe
-          - os: macos-latest
-            name: macos
-            ext: ~
     
     env:
       project: "byml-to-yaml"
