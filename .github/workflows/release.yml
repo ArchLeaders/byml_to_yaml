@@ -70,14 +70,14 @@ jobs:
         uses: thedoctor0/zip-release@main
         with:
           type: zip
-          filename: ${{ env.project }}-v${{ steps.toml.outputs.value }}-${{ matrix.platform.name }}.zip
+          filename: ${{ env.project }}-${{ steps.toml.outputs.value }}-${{ matrix.platform.name }}.zip
           path: ${{ env.project }}${{ matrix.platform.ext }}
           directory: target/release
 
       - name: Upload release assets
-        uses: AButler/upload-release-assets@v2.0
+        uses: Shopify/upload-to-release@v1.0.1
         with:
-          files: ./*.zip
-          release-tag: 'v${{ steps.toml.outputs.value }}'
+          name: ${{ env.project }}-${{ steps.toml.outputs.value }}-${{ matrix.platform.name }}.zip
+          path: ${{ env.project }}-${{ steps.toml.outputs.value }}-${{ matrix.platform.name }}.zip
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           
