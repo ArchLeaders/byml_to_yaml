@@ -1,0 +1,79 @@
+on:
+  release:
+    types: [created]
+
+jobs:
+  release:
+    name: Release ${{ matrix.platform.name }}
+    runs-on: ${{ matrix.platform.os }}
+    strategy:
+      matrix:
+        platform:
+          - os: ubuntu-latest
+            name: linux
+            ext: ~
+          - os: windows-latest
+            name: windows
+            ext: .exe
+          - os: macos-latest
+            name: macos
+            ext: ~
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Cache crates
+        uses: actions/cache@v3
+        with:
+          key: ${{ matrix.platform.os }}-cargo-cache
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ./target
+
+      - name: Get version
+        uses: SebRollen/toml-action@v1.0.1
+        id: toml
+        with:
+          file: 'Cargo.toml'
+          field: 'workspace.package.version'
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Build
+        run: cargo build --release
+        env:
+          UPDATE_PLATFORM: ${{ matrix.platform.name }}
+          MACOSX_DEPLOYMENT_TARGET: 11.0
+
+      - name: UPX compress binary
+        uses: crazy-max/ghaction-upx@v2.2.0
+        if: contains(matrix.platform.os, 'ubuntu')
+        with:
+          version: v4.0.2
+          args: --best --lzma
+          files: ./target/release/${{ env.project }}${{ matrix.platform.ext }}
+
+      - name: Archive release
+        uses: thedoctor0/zip-release@main
+        with:
+          type: zip
+          filename: ${{ env.project }}-v${{ steps.toml.outputs.value }}-${{ matrix.platform.name }}.zip
+          path: ${{ env.project }}${{ matrix.platform.ext }}
+          directory: target/release
+
+      - name: Upload release assets
+        uses: AButler/upload-release-assets@v2.0
+        with:
+          files: ./target/release/*.zip
+          release-tag: 'v${{ steps.toml.outputs.value }}'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
+    env:
+      project: "byml-to-yaml"
+      CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
+      CARGO_PROFILE_RELEASE_LTO: "true"
+      RUSTFLAGS: "-C link-arg=-s"
+      OPENSSL_STATIC: 1 
