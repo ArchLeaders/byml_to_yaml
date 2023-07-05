@@ -18,6 +18,14 @@ jobs:
           - os: macos-latest
             name: macos
             ext: ~
+    
+    env:
+      project: "byml-to-yaml"
+      CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
+      CARGO_PROFILE_RELEASE_LTO: "true"
+      RUSTFLAGS: "-C link-arg=-s"
+      OPENSSL_STATIC: 1
+      
     steps:
       - uses: actions/checkout@master
 
@@ -67,13 +75,7 @@ jobs:
       - name: Upload release assets
         uses: AButler/upload-release-assets@v2.0
         with:
-          files: ./target/release/*.zip
+          files: ./target/release/${{ env.project }}-v${{ steps.toml.outputs.value }}-${{ matrix.platform.name }}.zip
           release-tag: 'v${{ steps.toml.outputs.value }}'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           
-    env:
-      project: "byml-to-yaml"
-      CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
-      CARGO_PROFILE_RELEASE_LTO: "true"
-      RUSTFLAGS: "-C link-arg=-s"
-      OPENSSL_STATIC: 1 
