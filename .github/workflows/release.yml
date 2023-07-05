@@ -78,6 +78,6 @@ jobs:
         uses: Shopify/upload-to-release@v1.0.1
         with:
           name: ${{ env.project }}-${{ steps.toml.outputs.value }}-${{ matrix.platform.name }}.zip
-          path: ${{ env.project }}-${{ steps.toml.outputs.value }}-${{ matrix.platform.name }}.zip
+          path: target/release/${{ env.project }}-${{ steps.toml.outputs.value }}-${{ matrix.platform.name }}.zip
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           
