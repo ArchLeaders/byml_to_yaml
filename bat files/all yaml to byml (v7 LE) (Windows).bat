@@ -1,0 +1,1 @@
+for /r %%i in (*.yaml) do byml-to-yaml.exe to-byml "%%~ni.yaml" -o "%%~ni.byml" -v "7" -e "little"
