@@ -2,6 +2,49 @@
 
 Simple BYML to YAML converter written in rust using the [roead](https://github.com/NiceneNerd/roead) library by [NiceneNerd](https://github.com/NiceneNerd) with BYML v7 support.
 
+## Usage
+
+### Options
+```
+-d, --debug
+  Verbose logging for debugging
+
+-h, --help
+  Prints help information.
+```
+
+### Sub Commands
+
+#### `to-yaml`
+
+```
+ARGS:
+  <path>
+    Path to the source BYML to convert to YAML
+
+OPTIONS:
+  -o, --output <output>
+    Output YAML file (defaults to $path with a yml extension)
+```
+
+#### `to-byml`
+
+```
+ARGS:
+  <path>
+    Path to the source YAML to convert to BYML
+
+OPTIONS:
+  -o, --output <output>
+    Output BYML file (defaults to $path with a byml extension)
+
+  -v, --version <version>
+    Output BYML version
+
+  -e, --endianness <endianness>
+    Output BYML endianness
+```
+
 ## Scripts (Windows Only)
 
 In the [scripts](/scripts) folder there are two batch files, one to convert every byml file to yaml in a folder, and one to convert every yaml file to byml.
